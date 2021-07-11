@@ -96,8 +96,7 @@ bool WillThemeRoomFit(int floor, int x, int y, int minSize, int maxSize, int *wi
 	int xCount = 0;
 	int yCount = 0;
 
-	// BUGFIX: change '&&' to '||' (fixed)
-	if (x > DMAXX - maxSize || y > DMAXY - maxSize) {
+	if ((x + maxSize >= DMAXX || y + minSize >= DMAXY) && (x + minSize >= DMAXX && y + maxSize >= DMAXY)) {
 		return false;
 	}
 	if (!SkipThemeRoom(x, y)) {
@@ -110,6 +109,7 @@ bool WillThemeRoomFit(int floor, int x, int y, int minSize, int maxSize, int *wi
 	for (int ii = 0; ii < maxSize; ii++) {
 		if (xFlag) {
 			for (int xx = x; xx < x + maxSize; xx++) {
+				// BUGFIX: check y + ii < DMAXY
 				if (dungeon[xx][y + ii] != floor) {
 					if (xx >= minSize) {
 						break;
@@ -126,6 +126,7 @@ bool WillThemeRoomFit(int floor, int x, int y, int minSize, int maxSize, int *wi
 		}
 		if (yFlag) {
 			for (int yy = y; yy < y + maxSize; yy++) {
+				// BUGFIX: check x + ii < DMAXX
 				if (dungeon[x + ii][yy] != floor) {
 					if (yy >= minSize) {
 						break;
